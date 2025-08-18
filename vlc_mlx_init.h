@@ -34,6 +34,26 @@ typedef struct {
 	shared_int_t play_speed;
 } shared_flags_t;
 
+typedef struct {
+	int x;
+	int y;
+	int img_y;
+	int img_x;
+	int videoW;
+	int videoH;
+	int step_x;
+	int step_y;
+	int sy;
+	int sx;
+	unsigned int c;
+	unsigned char r;
+	unsigned char g;
+	unsigned char b;
+	unsigned int *src;
+	unsigned int *dst;
+	t_dt2 *data;
+} t_resized_frame_dt;
+
 typedef struct s_dt2
 {
 	void				*img;

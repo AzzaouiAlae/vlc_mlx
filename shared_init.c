@@ -32,7 +32,7 @@ void	init_mutexes(void)
 	shared_int_access(&shared_flags->play_speed, 1, 100);
 }
 
-void	init_shared_flags_parent(void)
+void	init_flags(void)
 {
 	int	fd;
 
@@ -59,7 +59,6 @@ void	init_shared_flags_parent(void)
 	close(fd);
 	init_mutexes();
 }
-
 
 void	copy_frame(void *data_img, size_t img_w, size_t img_h)
 {
@@ -98,26 +97,6 @@ void	my_vlc_mlx_put_pixel(t_dt2 *data, int x, int y, int color)
 	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
 	*(unsigned int *)dst = color;
 }
-
-typedef struct {
-	int x;
-	int y;
-	int img_y;
-	int img_x;
-	int videoW;
-	int videoH;
-	int step_x;
-	int step_y;
-	int sy;
-	int sx;
-	unsigned int c;
-	unsigned char r;
-	unsigned char g;
-	unsigned char b;
-	unsigned int *src;
-	unsigned int *dst;
-	t_dt2 *data;
-} t_resized_frame_dt;
 
 bool init_copy_resized(t_resized_frame_dt *dt, void *data, size_t img_w, size_t img_h)
 {
