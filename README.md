@@ -17,7 +17,6 @@ A small, easy-to-use wrapper that integrates VLC media playback with `mlx`.
 ## Requirements
 
 * `mlx` (MiniLibX)
-* A working VLC / libVLC installation available at link time.
 
 ---
 
