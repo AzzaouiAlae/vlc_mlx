@@ -1,7 +1,7 @@
 # vlc\_mlx
 
 A small, easy-to-use wrapper that integrates VLC media playback with `mlx`.
-Use `vlc_mlx` to render video frames and play audio inside an `mlx` application with a minimal, flag-driven API.
+`vlc_mlx` lets you render video frames and play audio inside an `mlx` application via a minimal, flag-driven API.
 
 ---
 
@@ -9,7 +9,7 @@ Use `vlc_mlx` to render video frames and play audio inside an `mlx` application 
 
 * Play video with audio while rendering frames into an `mlx` image.
 * Play standalone audio files and control playback speed.
-* Simple flag-based API to integrate video/audio into your game loop.
+* Simple flag-based API for easy integration into a game loop.
 * Explicit init / cleanup functions to avoid leaking resources.
 
 ---
@@ -17,7 +17,7 @@ Use `vlc_mlx` to render video frames and play audio inside an `mlx` application 
 ## Requirements
 
 * `mlx` (MiniLibX)
-* A working VLC/libVLC build accessible to the library (linking handled when building).
+* A working VLC / libVLC installation available at link time.
 
 ---
 
@@ -53,8 +53,6 @@ exit_clear_vlc();
 
 ## Public API
 
-The header exposes the following functions:
-
 ```c
 void    init_flags(void);
 void    play_video(char *file);
@@ -75,17 +73,15 @@ int     play_speed(void);
 
 **Notes**
 
-* `play_video` plays both the video and its audio track. It also makes new frames available through `new_frame()` and `copy_frame()`.
-* `copy_frame()` copies the current frame into your `mlx` image buffer. Use `video_w()`/`video_h()` for frame dimensions.
-* `copy_resized_frame()` is provided if you need to copy into a buffer with different dimensions (implementation-specific).
-* `should_clean_vlc()` and `clear_vlc()` let you free temporary playback resources when playback finishes.
-* `set_play_speed(int speed)` takes an integer where `100` is normal speed (i.e., `150` == 1.5×).
+* `play_video()` plays the video and its audio track and makes frames available via `new_frame()`/`copy_frame()`.
+* `copy_frame()` copies the current frame into your `mlx` image buffer. Use `video_w()` / `video_h()` to query frame size.
+* `copy_resized_frame()` can be used when destination buffer dimensions differ from the source.
+* `should_clean_vlc()` becomes true when playback finishes; call `clear_vlc()` to free playback resources.
+* `set_play_speed(int speed)` expects an integer where `100` is normal speed (e.g. `150` == 1.5×).
 
 ---
 
-## Example
-
-A concise example integrating `vlc_mlx` into an `mlx` render loop:
+## Example integration
 
 ```c
 int render_game(void *param)
@@ -94,14 +90,13 @@ int render_game(void *param)
 
     if (new_frame())
     {
-        // copy the latest video frame into your mlx image and present it
+        // copy latest video frame into your mlx image and present it
         copy_frame(&g_win_img, 1920, 1080);
         mlx_put_image_to_window(g_mlx, g_win, g_win_img.img, 0, 0);
     }
     else if (!should_play_video())
     {
-        // normal game rendering & logic when video is not playing
-        // e.g. player movement, HUD, etc.
+        // normal game rendering & logic
         set_play_speed(150); // example: 1.5x audio speed
         play_audio(get_audio_file_name());
     }
@@ -114,18 +109,20 @@ int render_game(void *param)
 
 int main(int argc, char **argv)
 {
-    // initialization...
-    init_flags();
+    (void)argc; (void)argv;
 
-    // set up mlx, windows, images, etc.
+    // initialize library flags and mlx
+    init_flags();
+    // ... create mlx context, window, and images ...
+
     mlx_loop_hook(g_mlx, render_game, NULL);
 
-    // play a video (this will provide frames/audio to the loop)
+    // start playback (provides frames to the render loop)
     play_video("media/intro1.mp4");
 
     mlx_loop(g_mlx);
 
-    // on exit, clean library resources (if you reach here)
+    // final cleanup in case the loop exits
     exit_clear_vlc();
     return 0;
 }
@@ -135,9 +132,40 @@ int close_window(void *param)
     (void)param;
     exit_clear_vlc();
     exit(0);
-    return (0);
+    return 0;
 }
 ```
+
+---
+
+## How to compile
+
+The repository builds `vlc_mlx` as a sub-target. Example `Makefile` snippet to compile your program and build the `vlc_mlx` static library first:
+
+```makefile
+NAME := my_app
+CC   := gcc
+CFLAGS := -Wall -Wextra -Werror `pkg-config --cflags libvlc` 
+LDLIBS := `pkg-config --libs libvlc` -lmlx -lm -lpthread
+
+SRCS := main.c game.c ...
+OBJ  := $(SRCS:.c=.o)
+
+all: mlx_vlc $(NAME)
+
+$(NAME): $(OBJ)
+	$(CC) $(CFLAGS) $(OBJ) vlc_mlx/libvlcmlx.a $(LDLIBS) -o $(NAME)
+
+# build the vlc_mlx library (runs the Makefile inside the subdirectory)
+mlx_vlc:
+	@$(MAKE) -C vlc_mlx
+```
+
+**Notes & tips**
+
+* `pkg-config --cflags --libs libvlc` is suggested for obtaining platform-specific flags for libVLC.
+* Ensure `vlc_mlx/libvlcmlx.a` is built before linking your binary (the `mlx_vlc` target handles this).
+* Adjust `LDLIBS` to match your platform and how `mlx` is provided (system library, local copy, etc.).
 
 ---
 
@@ -145,17 +173,25 @@ int close_window(void *param)
 
 * Call `init_flags()` once before starting playback.
 * Use `new_frame()` to detect when `copy_frame()` has fresh frame data to render.
-* Always call `exit_clear_vlc()` (for final cleanup) before terminating your program.
-* `should_clean_vlc()` becomes true when playback has finished and resources should be released with `clear_vlc()`.
+* Always call `exit_clear_vlc()` for final cleanup before terminating the program.
+* Use `should_clean_vlc()` + `clear_vlc()` to free playback resources immediately after a playback finishes.
 
 ---
 
 ## Contributing
 
-Contributions, bug reports, and feature requests are welcome. Please open an issue or submit a pull request with a clear description and a minimal repro when possible.
+Contributions, bug reports, and feature requests are welcome. Please open an issue or submit a pull request with a clear description and a minimal reproduction case when possible.
 
 ---
 
 ## License
 
-Specify your preferred license here (e.g. MIT, Apache-2.0).
+Choose and include a license (e.g., MIT, Apache-2.0). If you want, I can add an MIT or Apache license file for you.
+
+---
+
+If you want, I can:
+
+* add a short `Makefile` tailored to your project layout,
+* include a small sample program that compiles and runs with `vlc_mlx`, or
+* produce a ready-to-use `LICENSE` file. Which would you like next?
