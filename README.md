@@ -53,21 +53,26 @@ exit_clear_vlc();
 ## Public API
 
 ```c
-void    init_flags(void);
-void    play_video(char *file);
-void    play_audio(char *file);
-void    set_play_speed(int speed);
-bool    played_audio(void);
-bool    should_play_video(void);
-bool    should_clean_vlc(void);
-bool    new_frame(void);
-void    copy_frame(void *data_img, size_t img_w, size_t img_h);
-void    copy_resized_frame(void *dt, size_t img_w, size_t img_h);
-void    clear_vlc(void);
-size_t  video_h(void);
-size_t  video_w(void);
-void    exit_clear_vlc(void);
-int     play_speed(void);
+void    init_flags(void);                                // Must be called first before using vlc_mlx
+void    play_video(char *file);                          // Plays a video with audio and provides its frames.
+                                                        // Use should_play_video() and new_frame() to check playback status and frame availability.
+                                                        // Use copy_frame() or copy_resized_frame() to copy the frame into a t_data image.
+                                                        // After playback, call should_clean_vlc() and clear_vlc() to clean up.
+void    play_audio(char *file);                          // Plays an audio file
+void    set_play_speed(int speed);                       // Sets playback speed (100 = normal, 200 = double, etc.)
+bool    played_audio(void);                              // Returns true if an audio file is currently playing
+bool    should_play_video(void);                         // Returns true if a video is currently playing
+bool    should_clean_vlc(void);                          // Returns true if vlc_mlx needs cleanup after playing a video
+bool    new_frame(void);                                 // Returns true if a new frame is available
+void    copy_frame(void *data_img, size_t img_w, size_t img_h);          
+                                                        // Copies the current frame into a t_data image
+void    copy_resized_frame(void *dt, size_t img_w, size_t img_h);  
+                                                        // Copies and resizes the current frame into a t_data image
+void    clear_vlc(void);                                 // Cleans up vlc_mlx after video playback
+size_t  video_h(void);                                   // Returns the current video height
+size_t  video_w(void);                                   // Returns the current video width
+void    exit_clear_vlc(void);                            // Cleans up vlc_mlx before exiting the program
+int     play_speed(void);                                // Returns the current playback speed set by set_play_speed()
 ```
 
 **Notes**
