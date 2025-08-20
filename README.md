@@ -179,15 +179,3 @@ mlx_vlc:
 Contributions, bug reports, and feature requests are welcome. Please open an issue or submit a pull request with a clear description and a minimal reproduction case when possible.
 
 ---
-
-## License
-
-Choose and include a license (e.g., MIT, Apache-2.0). If you want, I can add an MIT or Apache license file for you.
-
----
-
-If you want, I can:
-
-* add a short `Makefile` tailored to your project layout,
-* include a small sample program that compiles and runs with `vlc_mlx`, or
-* produce a ready-to-use `LICENSE` file. Which would you like next?
