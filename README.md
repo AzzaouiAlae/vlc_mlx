@@ -145,7 +145,6 @@ The repository builds `vlc_mlx` as a sub-target. Example `Makefile` snippet to c
 NAME := my_app
 CC   := gcc
 CFLAGS := -Wall -Wextra -Werror `pkg-config --cflags libvlc` 
-LDLIBS := `pkg-config --libs libvlc` -lmlx -lm -lpthread
 
 SRCS := main.c game.c ...
 OBJ  := $(SRCS:.c=.o)
@@ -153,7 +152,7 @@ OBJ  := $(SRCS:.c=.o)
 all: mlx_vlc $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) vlc_mlx/libvlcmlx.a $(LDLIBS) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJ) vlc_mlx/libvlcmlx.a -o $(NAME)
 
 # build the vlc_mlx library (runs the Makefile inside the subdirectory)
 mlx_vlc:
@@ -162,9 +161,7 @@ mlx_vlc:
 
 **Notes & tips**
 
-* `pkg-config --cflags --libs libvlc` is suggested for obtaining platform-specific flags for libVLC.
 * Ensure `vlc_mlx/libvlcmlx.a` is built before linking your binary (the `mlx_vlc` target handles this).
-* Adjust `LDLIBS` to match your platform and how `mlx` is provided (system library, local copy, etc.).
 
 ---
 
