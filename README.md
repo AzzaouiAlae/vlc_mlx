@@ -148,7 +148,7 @@ The repository builds `vlc_mlx` as a sub-target. Example `Makefile` snippet to c
 
 ```makefile
 NAME := my_app
-CC   := gcc
+CC   := cc
 CFLAGS := -Wall -Wextra -Werror 
 
 SRCS := main.c game.c ...
@@ -159,7 +159,6 @@ all: mlx_vlc $(NAME)
 $(NAME): $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) vlc_mlx/libvlcmlx.a -o $(NAME)
 
-# build the vlc_mlx library (runs the Makefile inside the subdirectory)
 mlx_vlc:
 	@$(MAKE) -C vlc_mlx
 
