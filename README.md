@@ -149,7 +149,7 @@ The repository builds `vlc_mlx` as a sub-target. Example `Makefile` snippet to c
 ```makefile
 NAME := my_app
 CC   := gcc
-CFLAGS := -Wall -Wextra -Werror `pkg-config --cflags libvlc` 
+CFLAGS := -Wall -Wextra -Werror 
 
 SRCS := main.c game.c ...
 OBJ  := $(SRCS:.c=.o)
