@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   shared_int.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aazzaoui <aazzaoui@student.1337.ma>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/26 18:46:15 by aazzaoui          #+#    #+#             */
+/*   Updated: 2025/08/26 18:57:38 by aazzaoui         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "vlc_mlx_init.h"
 
-void	init_mutex(shared_int_t *sint)
+void	init_mutex(t_shared_int *sint)
 {
 	pthread_mutexattr_t	attr;
 
@@ -11,7 +23,7 @@ void	init_mutex(shared_int_t *sint)
 	sint->value = 0;
 }
 
-int	shared_int_access(shared_int_t *shared, int set, int value)
+int	shared_int_access(t_shared_int *shared, int set, int value)
 {
 	int	val;
 
@@ -25,32 +37,10 @@ int	shared_int_access(shared_int_t *shared, int set, int value)
 
 bool	should_clean_vlc(void)
 {
-	return (shared_int_access(&shared_flags->should_clean, 0, 0));
+	return (shared_int_access(&g_shared_flags->should_clean, 0, 0));
 }
 
 bool	should_play_video(void)
 {
-	return (shared_int_access(&shared_flags->should_play, 0, 0));
-}
-
-void	exit_clear_vlc(void)
-{
-	if (pid)
-		kill(pid, SIGTERM);
-	if (video_pid)
-		kill(video_pid, SIGTERM);
-	if (buffer_name)
-		free(buffer_name);
-	if (shared_flags) 
-	{
-        munmap(shared_flags, sizeof(*shared_flags));
-        shared_flags = NULL;
-    }
-    if (flags_name) {
-        shm_unlink(flags_name);
-        free(flags_name);
-        flags_name = NULL;
-    }
-	waitpid(pid, 0, 0);
-	waitpid(video_pid, 0, 0);
+	return (shared_int_access(&g_shared_flags->should_play, 0, 0));
 }

@@ -1,12 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   vlc_exec.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aazzaoui <aazzaoui@student.1337.ma>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/26 18:46:23 by aazzaoui          #+#    #+#             */
+/*   Updated: 2025/08/26 18:57:29 by aazzaoui         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "vlc_mlx_init.h"
 
-shared_flags_t	*shared_flags;
-void			*shared_buffer;
-char			*flags_name;
-char			*buffer_name;
-pid_t			pid;
-pid_t			video_pid;
-char			*vlc_path = "./vlc_mlx/vlc_mlx";
+t_shared_flags	*g_shared_flags;
+void			*g_shared_buffer;
+char			*g_flags_name;
+char			*g_buffer_name;
+pid_t			g_pid;
+pid_t			g_video_pid;
+char			*g_vlc_path = "./vlc_mlx/vlc_mlx";
 
 char	**make_execv_args(const char *filename, bool video_rendering)
 {
@@ -15,7 +27,10 @@ char	**make_execv_args(const char *filename, bool video_rendering)
 	char	**args;
 
 	i = 0;
-	argc = video_rendering ? 5 : 4;
+	if (video_rendering)
+		argc = 5;
+	else
+		argc = 4;
 	args = calloc(argc, sizeof(char *));
 	if (!args)
 	{
@@ -25,9 +40,9 @@ char	**make_execv_args(const char *filename, bool video_rendering)
 	i = 0;
 	args[i++] = "vlc_mlx";
 	args[i++] = (char *)filename;
-	args[i++] = (char *)flags_name;
+	args[i++] = (char *)g_flags_name;
 	if (video_rendering)
-		args[i++] = (char *)buffer_name;
+		args[i++] = (char *)g_buffer_name;
 	args[i] = NULL;
 	return (args);
 }
@@ -36,42 +51,56 @@ void	exec_vlc(char *file, bool video_rendering)
 {
 	char	**args;
 
-	if (pid || video_pid)
+	if (g_pid || g_video_pid)
 		return ;
 	if (video_rendering)
-		buffer_name = generate_random_shm_name();
+		g_buffer_name = generate_random_shm_name();
 	args = make_execv_args(file, video_rendering);
-	shared_buffer = NULL;
+	g_shared_buffer = NULL;
 	if (video_rendering)
-		video_pid = fork();
+		g_video_pid = fork();
 	else
-		pid = fork();
-	if (pid != 0 || video_pid != 0)
+		g_pid = fork();
+	if (g_pid != 0 || g_video_pid != 0)
 	{
 		free(args);
 		return ;
 	}
-	execv(vlc_path, args);
+	execv(g_vlc_path, args);
 	free(args);
 	exit(1);
 }
 
 void	play_video(char *file)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	while (played_audio() && !should_clean_vlc() && i < 2000)
+	if (!file_exists(file) || !is_video_file(file))
 	{
-		usleep(500);
-		i++;
+		write(2, "Error\ninvalid file\n", 19);
+		return ;
 	}
+	while (played_audio() && !should_clean_vlc() && i++ < 200)
+		usleep(5000);
 	if (should_clean_vlc())
 		clear_vlc();
 	exec_vlc(file, true);
+	i = 0;
+	while (i++ < 2000)
+	{
+		if (should_play_video() || should_clean_vlc())
+			break ;
+		usleep(500);
+	}
 }
 
 void	play_audio(char *file)
 {
+	if (!file_exists(file) || !is_audio_file(file))
+	{
+		write(2, "Error\ninvalid file\n", 19);
+		return ;
+	}
 	exec_vlc(file, false);
 }

@@ -1,36 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   shared_flags.c                                     :+:      :+:    :+:   */
+/*   vlc_file_checks.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aazzaoui <aazzaoui@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/26 18:45:55 by aazzaoui          #+#    #+#             */
-/*   Updated: 2025/08/26 18:49:06 by aazzaoui         ###   ########.fr       */
+/*   Created: 2025/08/26 18:46:26 by aazzaoui          #+#    #+#             */
+/*   Updated: 2025/08/26 18:46:27 by aazzaoui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vlc_mlx_init.h"
 
-bool	played_audio(void)
+bool	file_exists(char *filename)
 {
-	return (shared_int_access(&g_shared_flags->played_audio, 0, 0));
+	return (access(filename, R_OK) == 0);
 }
 
-size_t	buff_size(void)
+bool	is_video_file(char *path)
 {
-	int	res;
+	char	cmd[512];
 
-	res = shared_int_access(&g_shared_flags->buff_size, 0, 0);
-	return ((size_t)res);
+	snprintf(cmd, sizeof(cmd), "file --mime-type '%s' | grep -q 'video/'",
+		path);
+	return (system(cmd) == 0);
 }
 
-void	set_play_speed(int speed)
+int	is_audio_file(char *path)
 {
-	shared_int_access(&g_shared_flags->play_speed, 1, speed);
-}
+	char	cmd[512];
 
-int	play_speed(void)
-{
-	return (shared_int_access(&g_shared_flags->play_speed, 0, 0));
+	snprintf(cmd, sizeof(cmd), "file --mime-type '%s' | grep -q 'audio/'",
+		path);
+	return (system(cmd) == 0);
 }
