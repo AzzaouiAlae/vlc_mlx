@@ -162,6 +162,15 @@ $(NAME): $(OBJ)
 # build the vlc_mlx library (runs the Makefile inside the subdirectory)
 mlx_vlc:
 	@$(MAKE) -C vlc_mlx
+
+clean :
+	@$(MAKE) clean -C vlc_mlx
+	rm -fr $(OBJ)
+
+fclean : clean
+	@$(MAKE) fclean -C vlc_mlx
+	rm -fr $(NAME)
+
 ```
 
 **Notes & tips**
