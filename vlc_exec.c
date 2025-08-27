@@ -6,7 +6,7 @@
 /*   By: aazzaoui <aazzaoui@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 18:46:23 by aazzaoui          #+#    #+#             */
-/*   Updated: 2025/08/26 18:57:29 by aazzaoui         ###   ########.fr       */
+/*   Updated: 2025/08/27 09:26:28 by aazzaoui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ char			*g_flags_name;
 char			*g_buffer_name;
 pid_t			g_pid;
 pid_t			g_video_pid;
-char			*g_vlc_path = "./vlc_mlx/vlc_mlx";
 
 char	**make_execv_args(const char *filename, bool video_rendering)
 {
@@ -49,7 +48,9 @@ char	**make_execv_args(const char *filename, bool video_rendering)
 
 void	exec_vlc(char *file, bool video_rendering)
 {
-	char	**args;
+	const char	*home = getenv("HOME");
+	char		vlc_path[1024];
+	char		**args;
 
 	if (g_pid || g_video_pid)
 		return ;
@@ -66,7 +67,10 @@ void	exec_vlc(char *file, bool video_rendering)
 		free(args);
 		return ;
 	}
-	execv(g_vlc_path, args);
+	bzero(vlc_path, 1024);
+	strcat(vlc_path, home);
+	strcat(vlc_path, "/vlc_mlx/vlc_mlx");
+	execv(vlc_path, args);
 	free(args);
 	exit(1);
 }
