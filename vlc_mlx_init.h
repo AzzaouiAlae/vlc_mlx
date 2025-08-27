@@ -6,7 +6,7 @@
 /*   By: aazzaoui <aazzaoui@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 18:46:30 by aazzaoui          #+#    #+#             */
-/*   Updated: 2025/08/26 19:27:49 by aazzaoui         ###   ########.fr       */
+/*   Updated: 2025/08/27 09:40:48 by aazzaoui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,9 +122,6 @@ void							init_mutex(t_shared_int *sint);
 void							init_audio(char *file);
 void							init_video(char *file);
 void							init_shared_buffer_child(void);
-unsigned int					video_format_cb(void **opaque, char *chroma,
-									unsigned int *width, unsigned int *height,
-									unsigned int *pitches, unsigned int *lines);
 void							video_cleanup_cb(void *opaque);
 void							*video_lock_cb(void *opaque, void **planes);
 void							video_unlock_cb(void *opaque, void *picture,

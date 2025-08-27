@@ -68,6 +68,10 @@ void    copy_frame(void *data_img, size_t img_w, size_t img_h);
                                                         // Copies the current frame into a t_data image
 void    copy_resized_frame(void *dt, size_t img_w, size_t img_h);  
                                                         // Copies and resizes the current frame into a t_data image
+void	copy_start_end_frame(void *data)                // Copies and resizes the current frame into a t_data image
+                                                        // with void set_frame_start_end you set the start, end of the frame in the image
+void	set_frame_start_end(int start_x, int start_y, int end_x, int end_y);
+                                                        // set start and end of the frame to use it with function copy_start_end_frame
 void    clear_vlc(void);                                 // Cleans up vlc_mlx after video playback
 size_t  video_h(void);                                   // Returns the current video height
 size_t  video_w(void);                                   // Returns the current video width

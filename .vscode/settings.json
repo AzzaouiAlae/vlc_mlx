@@ -1,6 +1,7 @@
 {
 	"files.associations": {
 		".fantomasignore": "ignore",
-		"wait.h": "c"
+		"wait.h": "c",
+		"vlc_mlx_init.h": "c"
 	}
 }

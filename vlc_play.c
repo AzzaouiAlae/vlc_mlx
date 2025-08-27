@@ -6,31 +6,39 @@
 /*   By: aazzaoui <aazzaoui@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 18:46:39 by aazzaoui          #+#    #+#             */
-/*   Updated: 2025/08/26 19:17:12 by aazzaoui         ###   ########.fr       */
+/*   Updated: 2025/08/27 09:42:41 by aazzaoui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vlc_mlx_init.h"
 
-void	init_inst(int n, const char **vlc_args)
+unsigned int	video_format_cb(void **opaque, char *chroma,
+		unsigned int *width, unsigned int *height, unsigned int *pitches,
+		unsigned int *lines)
 {
-	g_inst = libvlc_new(n, (const char *const *)vlc_args);
-	if (!g_inst)
-	{
-		fprintf(stderr, "Failed to create VLC instance\n");
-		exit(1);
-	}
-}
+	t_video_ctx	*ctx;
 
-void	init_media(char *file)
-{
-	g_m = libvlc_media_new_path(g_inst, file);
-	if (!g_m)
+	memcpy(chroma, "RV32", 4);
+	if (!video_h() && !video_w())
 	{
-		fprintf(stderr, "Failed to load media: %s\n", file);
-		libvlc_release(g_inst);
-		exit(1);
+		shared_int_access(&g_shared_flags->video_height, 1, *height);
+		shared_int_access(&g_shared_flags->video_width, 1, *width);
 	}
+	if (pitches[0] == 0)
+		pitches[0] = video_w() * 4;
+	lines[0] = video_h();
+	ctx = malloc(sizeof(*ctx));
+	ctx->width = video_w();
+	ctx->height = video_h();
+	if (!g_shared_buffer)
+	{
+		shared_int_access(&g_shared_flags->buff_size, 1, pitches[0] * lines[0]);
+		init_shared_buffer_child();
+	}
+	ctx->pitch = pitches[0];
+	ctx->pixels = g_shared_buffer;
+	*opaque = ctx;
+	return (1);
 }
 
 void	handle_end_reached(const libvlc_event_t *event, void *user_data)
@@ -47,8 +55,8 @@ void	init_audio(char *file)
 
 	init_shared_flags_child();
 	shared_int_access(&g_shared_flags->played_audio, 1, 1);
-	init_inst(3, vlc_args);
-	init_media(file);
+	g_inst = libvlc_new(3, vlc_args);
+	g_m = libvlc_media_new_path(g_inst, file);
 	g_mp = libvlc_media_player_new_from_media(g_m);
 	if (libvlc_media_player_play(g_mp) != 0)
 	{

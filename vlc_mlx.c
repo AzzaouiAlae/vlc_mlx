@@ -6,7 +6,7 @@
 /*   By: aazzaoui <aazzaoui@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 18:46:34 by aazzaoui          #+#    #+#             */
-/*   Updated: 2025/08/26 19:24:37 by aazzaoui         ###   ########.fr       */
+/*   Updated: 2025/08/27 09:42:32 by aazzaoui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,18 +80,6 @@ void	init_shared_buffer_child(void)
 		exit(1);
 	}
 	close(fd);
-}
-
-void	set_speed(void)
-{
-	float	speed;
-
-	speed = play_speed();
-	speed /= 100;
-	if (libvlc_media_player_set_rate(g_mp, speed) != 0)
-	{
-		fprintf(stderr, "⚠️ Failed to set playback rate\n");
-	}
 }
 
 int	main(int argc, char **argv)
