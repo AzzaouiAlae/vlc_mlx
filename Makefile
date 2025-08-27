@@ -20,7 +20,7 @@ $(VLC_NAME) :
 			rm vlc_mlx.c video_callbacks.c vlc_play.c; \
 		fi; \
 	else \
-		$(CC) $(vlc_SRC) -L$(HOME)/libvlc/lib $(VLC_LIB) -o $(VLC_NAME); \
+		$(CC) $(vlc_SRC) -lvlc -L$(HOME)/libvlc/lib $(VLC_LIB) -o $(VLC_NAME); \
 	fi
 
 $(VLC_LIB): $(vlc_lib_OBJ)

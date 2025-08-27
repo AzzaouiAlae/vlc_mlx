@@ -23,4 +23,5 @@ vlc_mlx:
 		echo "⚠️ vlc_mlx not found. Downloading precompiled version..." >/dev/null; \
 		mkdir -p $(VLC_MLX_DIR); \
 		git clone $(VLC_MLX_URL) $(VLC_MLX_DIR); \
+		$(MAKE) -C $(VLC_MLX_DIR); \
 	fi
