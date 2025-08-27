@@ -178,7 +178,7 @@ fclean : clean
 
 **Notes & tips**
 
-* Ensure `vlc_mlx/libvlcmlx.a` is built before linking your binary (the `mlx_vlc` target handles this).
+* Ensure `vlc_mlx/libvlcmlx` is built before linking your binary (the `mlx_vlc` target handles this).
 
 ---
 
