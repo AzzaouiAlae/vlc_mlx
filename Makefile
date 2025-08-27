@@ -9,10 +9,12 @@ VLC_LIB=libvlcmlx
 CC = cc -I$(HOME)/libvlc/include
 CFLAGS= -Wall -Wextra -Werror -O3
 
-all : deps $(VLC_LIB) $(VLC_NAME)
+all : deps compile
 
 deps:
 	@$(MAKE) -f ./deps.mk
+
+compile: $(VLC_LIB) $(VLC_NAME)
 
 $(VLC_NAME) : 
 	@if [ "$(CURDIR)" != "$(HOME)/vlc_mlx" ]; then \

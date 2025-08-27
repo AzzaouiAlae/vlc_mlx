@@ -18,7 +18,11 @@ libvlc:
 	
 vlc_mlx:
 	@if [ -d "$(VLC_MLX_DIR)" ]; then \
-		echo "✅ vlc_mlx already downloaded in $(VLC_MLX_DIR)"; \
+		if [ -f $(VLC_MLX_DIR)/vlc_mlx ]; then \
+			echo "✅ vlc_mlx already downloaded in $(VLC_MLX_DIR)"; \
+		else \
+			$(MAKE) compile -C $(VLC_MLX_DIR); \
+		fi; \
 	else \
 		echo "⚠️ vlc_mlx not found. Downloading..."; \
 		mkdir -p $(VLC_MLX_DIR); \
