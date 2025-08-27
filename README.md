@@ -161,7 +161,7 @@ OBJ  := $(SRCS:.c=.o)
 all: mlx_vlc $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) vlc_mlx/libvlcmlx.a -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJ) vlc_mlx/libvlcmlx -o $(NAME)
 
 mlx_vlc:
 	@$(MAKE) -C vlc_mlx
