@@ -18,9 +18,9 @@ libvlc:
 	
 vlc_mlx:
 	@if [ -d "$(VLC_MLX_DIR)" ]; then \
-		echo "✅ vlc_mlx already downloaded in $(VLC_MLX_DIR)." >/dev/null; \
+		echo "✅ vlc_mlx already downloaded in $(VLC_MLX_DIR)"; \
 	else \
-		echo "⚠️ vlc_mlx not found. Downloading precompiled version..." >/dev/null; \
+		echo "⚠️ vlc_mlx not found. Downloading..."; \
 		mkdir -p $(VLC_MLX_DIR); \
 		git clone $(VLC_MLX_URL) $(VLC_MLX_DIR); \
 		$(MAKE) -C $(VLC_MLX_DIR); \
