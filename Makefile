@@ -6,7 +6,7 @@ vlc_lib_SRC = shared_flags.c shared_init.c shared_int.c time_random.c vlc_exec.c
 vlc_lib_OBJ = $(vlc_lib_SRC:.c=.o)
 VLC_NAME=vlc_mlx
 VLC_LIB=libvlcmlx
-CC = gcc -I$(HOME)/libvlc/include
+CC = cc -I$(HOME)/libvlc/include
 CFLAGS= -Wall -Wextra -Werror -O3
 
 all : deps $(VLC_LIB) $(VLC_NAME)
