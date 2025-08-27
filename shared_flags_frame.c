@@ -6,7 +6,7 @@
 /*   By: aazzaoui <aazzaoui@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 18:46:05 by aazzaoui          #+#    #+#             */
-/*   Updated: 2025/08/27 09:44:09 by aazzaoui         ###   ########.fr       */
+/*   Updated: 2025/08/27 10:25:58 by aazzaoui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,4 @@ bool	new_frame(void)
 	res = shared_int_access(&g_shared_flags->new_frame_flag, 0, 0);
 	shared_int_access(&g_shared_flags->new_frame_flag, 1, 0);
 	return (res > 0);
-}
-
-void	set_speed(void)
-{
-	float	speed;
-
-	speed = play_speed();
-	speed /= 100;
-	if (libvlc_media_player_set_rate(g_mp, speed) != 0)
-	{
-		fprintf(stderr, "⚠️ Failed to set playback rate\n");
-	}
 }

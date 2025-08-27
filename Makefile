@@ -14,10 +14,13 @@ all : deps $(VLC_LIB) $(VLC_NAME)
 deps:
 	@$(MAKE) -f ./deps.mk
 
-$(VLC_NAME) : $(vlc_OBJ)
+$(VLC_NAME) : 
 	@if [ "$(CURDIR)" != "$(HOME)/vlc_mlx" ]; then \
-		rm vlc_mlx.c video_callbacks.c vlc_play.c; \
+		if [ -f vlc_mlx.c ]; then \
+			rm vlc_mlx.c video_callbacks.c vlc_play.c; \
+		fi; \
 	else \
+		$(vlc_OBJ) \
 		$(CC) $(vlc_OBJ) -lvlc -L$(HOME)/libvlc/lib $(VLC_LIB) -o $(VLC_NAME); \
 	fi
 
