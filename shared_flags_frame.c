@@ -32,6 +32,7 @@ bool	new_frame(void)
 {
 	int	res;
 
+	play_sound_track();
 	res = shared_int_access(&(vars()->shared_flags)->new_frame_flag, 0, 0);
 	shared_int_access(&(vars()->shared_flags)->new_frame_flag, 1, 0);
 	return (res > 0);
