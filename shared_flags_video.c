@@ -14,28 +14,28 @@
 
 int	img_start_x(void)
 {
-	return (shared_int_access(&g_shared_flags->img_start_x, 0, 0));
+	return (shared_int_access(&(vars()->shared_flags)->img_start_x, 0, 0));
 }
 
 int	img_start_y(void)
 {
-	return (shared_int_access(&g_shared_flags->img_start_y, 0, 0));
+	return (shared_int_access(&(vars()->shared_flags)->img_start_y, 0, 0));
 }
 
 int	img_end_x(void)
 {
-	return (shared_int_access(&g_shared_flags->img_end_x, 0, 0));
+	return (shared_int_access(&(vars()->shared_flags)->img_end_x, 0, 0));
 }
 
 int	img_end_y(void)
 {
-	return (shared_int_access(&g_shared_flags->img_end_y, 0, 0));
+	return (shared_int_access(&(vars()->shared_flags)->img_end_y, 0, 0));
 }
 
 size_t	video_h(void)
 {
 	int	res;
 
-	res = shared_int_access(&g_shared_flags->video_height, 0, 0);
+	res = shared_int_access(&(vars()->shared_flags)->video_height, 0, 0);
 	return ((size_t)res);
 }

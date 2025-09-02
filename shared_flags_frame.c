@@ -16,23 +16,23 @@ size_t	video_w(void)
 {
 	int	res;
 
-	res = shared_int_access(&g_shared_flags->video_width, 0, 0);
+	res = shared_int_access(&(vars()->shared_flags)->video_width, 0, 0);
 	return ((size_t)res);
 }
 
 void	set_frame_start_end(int start_x, int start_y, int end_x, int end_y)
 {
-	shared_int_access(&g_shared_flags->img_start_x, 1, start_x);
-	shared_int_access(&g_shared_flags->img_start_y, 1, start_y);
-	shared_int_access(&g_shared_flags->img_end_x, 1, end_x);
-	shared_int_access(&g_shared_flags->img_end_y, 1, end_y);
+	shared_int_access(&(vars()->shared_flags)->img_start_x, 1, start_x);
+	shared_int_access(&(vars()->shared_flags)->img_start_y, 1, start_y);
+	shared_int_access(&(vars()->shared_flags)->img_end_x, 1, end_x);
+	shared_int_access(&(vars()->shared_flags)->img_end_y, 1, end_y);
 }
 
 bool	new_frame(void)
 {
 	int	res;
 
-	res = shared_int_access(&g_shared_flags->new_frame_flag, 0, 0);
-	shared_int_access(&g_shared_flags->new_frame_flag, 1, 0);
+	res = shared_int_access(&(vars()->shared_flags)->new_frame_flag, 0, 0);
+	shared_int_access(&(vars()->shared_flags)->new_frame_flag, 1, 0);
 	return (res > 0);
 }

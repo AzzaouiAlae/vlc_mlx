@@ -2,7 +2,7 @@ vlc_SRC = vlc_mlx.c video_callbacks.c vlc_play.c
 vlc_OBJ = $(vlc_SRC:.c=.o)
 vlc_lib_SRC = shared_flags.c shared_init.c shared_int.c time_random.c vlc_exec.c \
 				shared_copy_buff.c shared_copy_resize.c shared_flags_frame.c \
-				shared_flags_video.c vlc_file_checks.c vlc_clear.c
+				shared_flags_video.c vlc_file_checks.c vlc_clear.c sound_track.c
 vlc_lib_OBJ = $(vlc_lib_SRC:.c=.o)
 VLC_NAME=vlc_mlx
 VLC_LIB=libvlcmlx

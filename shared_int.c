@@ -37,10 +37,10 @@ int	shared_int_access(t_shared_int *shared, int set, int value)
 
 bool	should_clean_vlc(void)
 {
-	return (shared_int_access(&g_shared_flags->should_clean, 0, 0));
+	return (shared_int_access(&(vars()->shared_flags)->should_clean, 0, 0));
 }
 
 bool	should_play_video(void)
 {
-	return (shared_int_access(&g_shared_flags->should_play, 0, 0));
+	return (shared_int_access(&(vars()->shared_flags)->should_play, 0, 0));
 }

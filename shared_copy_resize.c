@@ -21,7 +21,7 @@ bool	init_copy_resized(t_resized_frame_dt *dt, void *data, size_t img_w,
 	{
 		return (false);
 	}
-	if (!g_shared_buffer)
+	if (!(vars()->shared_buffer))
 	{
 		init_shared_buffer_parent();
 	}
@@ -29,12 +29,12 @@ bool	init_copy_resized(t_resized_frame_dt *dt, void *data, size_t img_w,
 	dt->video_h = video_h();
 	dt->step_x = (dt->video_w << 16) / img_w;
 	dt->step_y = (dt->video_h << 16) / img_h;
-	dt->src = (unsigned int *)g_shared_buffer;
+	dt->src = (unsigned int *)(vars()->shared_buffer);
 	dt->img_y = 0;
 	dt->sy = 0;
 	dt->img_x = 0;
 	dt->sx = 0;
-	shared_int_access(&g_shared_flags->new_frame_flag, 1, 0);
+	shared_int_access(&(vars()->shared_flags)->new_frame_flag, 1, 0);
 	return (true);
 }
 
@@ -75,7 +75,7 @@ bool	init_start_end_resized(t_resized_frame_dt *dt, void *data)
 	{
 		return (false);
 	}
-	if (!g_shared_buffer)
+	if (!(vars()->shared_buffer))
 	{
 		init_shared_buffer_parent();
 	}
@@ -83,12 +83,12 @@ bool	init_start_end_resized(t_resized_frame_dt *dt, void *data)
 	dt->video_h = video_h();
 	dt->step_x = (dt->video_w << 16) / (img_end_x() - img_start_x());
 	dt->step_y = (dt->video_h << 16) / (img_end_y() - img_start_y());
-	dt->src = (unsigned int *)g_shared_buffer;
+	dt->src = (unsigned int *)(vars()->shared_buffer);
 	dt->img_x = img_start_x();
 	dt->img_y = img_start_y();
 	dt->sx = 0;
 	dt->sy = 0;
-	shared_int_access(&g_shared_flags->new_frame_flag, 1, 0);
+	shared_int_access(&(vars()->shared_flags)->new_frame_flag, 1, 0);
 	return (true);
 }
 

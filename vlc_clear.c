@@ -6,56 +6,69 @@
 /*   By: aazzaoui <aazzaoui@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 19:26:14 by aazzaoui          #+#    #+#             */
-/*   Updated: 2025/08/26 19:26:17 by aazzaoui         ###   ########.fr       */
+/*   Updated: 2025/09/02 14:31:20 by aazzaoui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vlc_mlx_init.h"
 
+void	clear_sound_track(void)
+{
+	pid_t	pid;
+
+	pid = sound_track_pid(0, 0);
+	if (!pid)
+		return ;
+	if (pid)
+		kill(pid, SIGTERM);
+	waitpid(pid, 0, 0);
+}
+
 void	clear_vlc(void)
 {
 	if (should_play_video())
 	{
-		munmap(g_shared_buffer, buff_size());
-		shm_unlink(g_buffer_name);
-		free(g_buffer_name);
-		g_buffer_name = NULL;
+		munmap(vars()->shared_buffer, buff_size());
+		shm_unlink(vars()->buffer_name);
+		free(vars()->buffer_name);
+		vars()->buffer_name = NULL;
 	}
-	shared_int_access(&g_shared_flags->should_clean, 1, 0);
-	shared_int_access(&g_shared_flags->should_play, 1, 0);
-	shared_int_access(&g_shared_flags->video_height, 1, 0);
-	shared_int_access(&g_shared_flags->video_width, 1, 0);
-	if (g_pid)
+	shared_int_access(&(vars()->shared_flags)->should_clean, 1, 0);
+	shared_int_access(&(vars()->shared_flags)->should_play, 1, 0);
+	shared_int_access(&(vars()->shared_flags)->video_height, 1, 0);
+	shared_int_access(&(vars()->shared_flags)->video_width, 1, 0);
+	if (vars()->audio_pid)
 	{
-		waitpid(g_pid, 0, 0);
-		g_pid = 0;
+		waitpid(vars()->audio_pid, 0, 0);
+		vars()->audio_pid = 0;
 	}
-	if (g_video_pid)
+	if (vars()->video_pid)
 	{
-		waitpid(g_video_pid, 0, 0);
-		g_video_pid = 0;
+		waitpid(vars()->video_pid, 0, 0);
+		vars()->video_pid = 0;
 	}
 }
 
 void	exit_clear_vlc(void)
 {
-	if (g_pid)
-		kill(g_pid, SIGTERM);
-	if (g_video_pid)
-		kill(g_video_pid, SIGTERM);
-	if (g_buffer_name)
-		free(g_buffer_name);
-	if (g_shared_flags)
+	if (vars()->audio_pid)
+		kill(vars()->audio_pid, SIGTERM);
+	if (vars()->video_pid)
+		kill(vars()->video_pid, SIGTERM);
+	if (vars()->buffer_name)
+		free(vars()->buffer_name);
+	if (vars()->shared_flags)
 	{
-		munmap(g_shared_flags, sizeof(*g_shared_flags));
-		g_shared_flags = NULL;
+		munmap(vars()->shared_flags, sizeof(*(vars()->shared_flags)));
+		vars()->shared_flags = NULL;
 	}
-	if (g_flags_name)
+	if (vars()->flags_name)
 	{
-		shm_unlink(g_flags_name);
-		free(g_flags_name);
-		g_flags_name = NULL;
+		shm_unlink(vars()->flags_name);
+		free(vars()->flags_name);
+		vars()->flags_name = NULL;
 	}
-	waitpid(g_pid, 0, 0);
-	waitpid(g_video_pid, 0, 0);
+	clear_sound_track();
+	waitpid(vars()->audio_pid, 0, 0);
+	waitpid(vars()->video_pid, 0, 0);
 }

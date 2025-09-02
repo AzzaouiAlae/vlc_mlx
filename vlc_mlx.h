@@ -34,5 +34,6 @@ void	exit_clear_vlc(void);
 int		play_speed(void);
 void	set_frame_start_end(int start_x, int start_y, int end_x, int end_y);
 void	copy_start_end_frame(void *data);
+void	sound_track(char **files);
 
 #endif

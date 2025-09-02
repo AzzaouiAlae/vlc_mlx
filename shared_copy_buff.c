@@ -18,11 +18,11 @@ void	copy_frame(void *data_img, size_t img_w, size_t img_h)
 
 	if (!data_img)
 		return ;
-	shared_int_access(&g_shared_flags->new_frame_flag, 1, 0);
+	shared_int_access(&(vars()->shared_flags)->new_frame_flag, 1, 0);
 	dt.win_img = data_img;
-	if (!g_shared_buffer)
+	if (!(vars()->shared_buffer))
 		init_shared_buffer_parent();
-	dt.src = g_shared_buffer;
+	dt.src = vars()->shared_buffer;
 	dt.dst = (uint8_t *)(dt.win_img->addr);
 	dt.dst_stride = (dt.win_img->line_length);
 	dt.src_stride = img_w * 4;
