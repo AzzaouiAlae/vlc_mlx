@@ -176,6 +176,38 @@ fclean : clean
 
 ```
 
+or you can use it as external lib and let your make file install it
+
+```makefile
+VLC_MLX_DIR := $(HOME)/vlc_mlx
+VLC_MLX_URL := git@github.com:AzzaouiAlae/vlc_mlx.git
+
+NAME := my_app
+CC   := cc
+CFLAGS := -Wall -Wextra -Werror -I$(VLC_MLX_DIR)
+
+SRCS := main.c game.c ...
+OBJ  := $(SRCS:.c=.o)
+
+all: mlx_vlc $(NAME)
+
+$(NAME): $(OBJ)
+	$(CC) $(CFLAGS) $(OBJ) $(VLC_MLX_DIR)/vlc_mlx/libvlcmlx -o $(NAME)
+
+mlx_vlc:
+	git clone $(VLC_MLX_URL) $(VLC_MLX_DIR); \
+	$(MAKE) -C $(VLC_MLX_DIR); \
+
+clean :
+	@$(MAKE) clean -C vlc_mlx
+	rm -fr $(OBJ)
+
+fclean : clean
+	@$(MAKE) fclean -C vlc_mlx
+	rm -fr $(NAME)
+
+```
+
 **Notes & tips**
 
 * Ensure `vlc_mlx/libvlcmlx` is built before linking your binary (the `mlx_vlc` target handles this).
