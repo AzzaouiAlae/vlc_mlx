@@ -149,5 +149,6 @@ char						**sound_name(int set, char **files);
 void						sound_track(char **files);
 pid_t						sound_track_pid(int set, pid_t value);
 t_globle_vars				*vars(void);
+void						clear_video_buffer(void);
 
 #endif
