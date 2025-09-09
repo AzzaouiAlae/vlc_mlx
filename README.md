@@ -191,19 +191,21 @@ OBJ  := $(SRCS:.c=.o)
 
 all: mlx_vlc $(NAME)
 
-$(NAME): $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) $(VLC_MLX_DIR)/vlc_mlx/libvlcmlx -o $(NAME)
+$(NAME) : $(OBJ)
+	$(CC) $(OBJ) $(mlx) $(VLC_MLX_DIR)/libvlcmlx -o $(NAME)
 
 mlx_vlc:
-	git clone $(VLC_MLX_URL) $(VLC_MLX_DIR); \
+	@if [ ! -d $(VLC_MLX_DIR) ]; then \
+		git clone $(VLC_MLX_URL) $(VLC_MLX_DIR); \
+	fi; \
 	$(MAKE) -C $(VLC_MLX_DIR); \
 
 clean :
-	@$(MAKE) clean -C vlc_mlx
-	rm -fr $(OBJ)
+	@$(MAKE) clean -C $(VLC_MLX_DIR)
+	rm -fr $(OBJ) $(vlc_OBJ)
 
 fclean : clean
-	@$(MAKE) fclean -C vlc_mlx
+	@$(MAKE) fclean -C $(VLC_MLX_DIR)
 	rm -fr $(NAME)
 
 ```
