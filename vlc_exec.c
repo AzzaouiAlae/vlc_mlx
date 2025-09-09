@@ -50,7 +50,7 @@ void	exec_vlc(char *file, bool video_rendering)
 	if (vars()->audio_pid || vars()->video_pid)
 		return ;
 	if (video_rendering)
-		vars()->buffer_name = generate_random_shm_name();
+		clear_video_buffer();
 	args = make_execv_args(file, video_rendering);
 	vars()->shared_buffer = NULL;
 	if (video_rendering)

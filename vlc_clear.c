@@ -24,6 +24,19 @@ void	clear_sound_track(void)
 	waitpid(pid, 0, 0);
 }
 
+void	clear_video_buffer(void)
+{
+	if (vars()->buffer_name)
+	{
+		munmap(vars()->shared_buffer, buff_size());
+		shm_unlink(vars()->buffer_name);
+		free(vars()->buffer_name);
+		vars()->buffer_name = NULL;
+		vars()->shared_buffer = NULL;
+	}
+	vars()->buffer_name = generate_random_shm_name();
+}
+
 void	clear_vlc(void)
 {
 	if (should_play_video())
